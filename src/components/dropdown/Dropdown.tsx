@@ -34,9 +34,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
     const [isActive, setIsActive] = useState<boolean>(false);
     const [renderedText, setRenderedText] = useState<string>('');
 
+    // select handler for multi-select
     const onSelectMultiple = (event: any) => {
-        // const value = event.target.getAttribute('value');
-        const value = event.target;
+        const value = event.target.getAttribute('value');
 
         onChange((prevSelected: Iterable<unknown> | null | undefined) => {
             const newSelected = new Set(prevSelected);
@@ -53,9 +53,10 @@ export const Dropdown: React.FC<DropdownProps> = ({
         });
     }
 
+    // select handler for single-select
     const onSelect = (event: any) => {
-        const value = event.target.getAttribute('value');
-        const label = event.target.textContent;
+        const value = event.target.getAttribute('value'); // the item's value
+        const label = event.target.textContent; // the item's label text
         if (selected?.has(value)) {
             onChange(new Set())
             setRenderedText('')
@@ -65,12 +66,15 @@ export const Dropdown: React.FC<DropdownProps> = ({
         }
     }
 
+    // handler for selecting/deselecting all
     const onSelectAll = (event: any) => {
         const isAllSelected = selected?.size === allDropdownItems?.length - 1;
 
         if (isAllSelected) {
+            // reset it
             onChange(new Set());
         } else {
+            // set all of the items as selected
             const allValues = allDropdownItems.map((item) => {
                 // TODO: need to figure out what is going on with the typing
                 if (!React.isValidElement(item)) {
@@ -89,9 +93,10 @@ export const Dropdown: React.FC<DropdownProps> = ({
         }
     }
 
+    // returns the list of dropdown items
     const allDropdownItems = (() => {
         if (multiple) {
-            // add the select/deselect all option and make it an array
+            // add the select/deselect all option
             const allOption = (
                 <DropdownItem
                     key={""}
@@ -101,18 +106,21 @@ export const Dropdown: React.FC<DropdownProps> = ({
             );
             return [allOption, ...React.Children.toArray(children)];
         } else {
-            // else just convert children to an array
+            // convert children to an array
             return React.Children.toArray(children);
         }
     })();
 
-    // format the text for
+    // format the text for the select box
     useEffect(() => {
+        if (!multiple) {
+            return;
+        }
         if (format) {
-            // custom formatter
+            // use custom formatter
             setRenderedText(format(selected));
         } else {
-            // default comma-separated
+            // use default formatter (comma-separated)
             setRenderedText(Array.from(selected ?? []).join(", "));
         }
     }, [selected]);
@@ -132,6 +140,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
         const itemObj: any = item.props;
 
         if (itemObj?.value === "") {
+            // renderer for the all option
             return (
                 <div style={style}>
                     {React.cloneElement(item as React.ReactElement<any>, {
@@ -141,6 +150,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 </div>
             );
         } else {
+            // renderer for all others
             return (
                 <div style={style}>
                     {React.cloneElement(item as React.ReactElement<any>, {
@@ -180,8 +190,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 {isActive &&
                     <ul className="dropdown-content">
                         <List
-                            height={300} // The height of the viewport (visible area)
-                            itemCount={React.Children.count(children)} // Total number of items (children)
+                            height={300} // The height of the visible area
+                            itemCount={React.Children.count(children)} // Total number of items
                             itemSize={40} // The height of each item in pixels
                             width="100%" // The width of the dropdown
                         >
