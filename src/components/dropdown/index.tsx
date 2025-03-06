@@ -4,7 +4,7 @@
  */
 import React, {
     useState
-} from "react";
+} from 'react';
 import '../../App.css';
 import CaretDown from '../../assets/icons/caret-down.svg';
 import CaretUp from '../../assets/icons/caret-up.svg';
@@ -18,13 +18,18 @@ const Dropdown: React.FC<DropdownProps> = ({
     children,
 }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [selected, setSelected] = useState<string[]>([]);
+
 
     return (
         <>
             <div className="dropdown">
-                {/*     Placeholder / Selected Text Field    */}
+                {/*     Text Field    */}
                 <div className="dropdown-button" onClick={() => setIsOpen(!isOpen)}>
-                    Choose One
+                    {/*     Placeholder if empty    */}
+                    {selected.length === 0
+                        ? "Choose One"
+                        : selected.toString()}
                     {isOpen
                         ? <img src={CaretUp} alt="Caret Up"/>
                         : <img src={CaretDown} alt="Caret Down"/>}
@@ -41,6 +46,10 @@ const Dropdown: React.FC<DropdownProps> = ({
                         </div>
                         <div className="dropdown-item">
                             option C
+                        </div>
+                        <div className="dropdown-item">
+                            A super duper long option that should not fit
+                            if it is not handled properly
                         </div>
                         <div className="dropdown-item">
                             option D

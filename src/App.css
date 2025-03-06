@@ -81,6 +81,7 @@
 .dropdown .dropdown-content .dropdown-item {
   padding: 16px;
   cursor: pointer;
+  text-align: left;
 }
 
 .dropdown .dropdown-item {
