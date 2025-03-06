@@ -28,7 +28,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                     {isOpen
                         ? <img src={CaretUp} alt="Caret Up"/>
                         : <img src={CaretDown} alt="Caret Down"/>}
-            </div>
+                </div>
 
                 {/*     Dropdown Menu Items     */}
                 {isOpen &&
