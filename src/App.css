@@ -66,6 +66,10 @@
   }
 }
 
+.dropdown .dropdown-button.active {
+  border: 2px solid black;
+}
+
 .dropdown .dropdown-button:hover {
   border: 2px solid black;
 }
@@ -91,11 +95,15 @@
   text-align: left;
 }
 
+.dropdown-item.selected {
+  background: lightgrey;
+}
+
 .dropdown .dropdown-item {
   display: flex;
   transition: background-color 0.2s ease-in-out;
 }
 
 .dropdown .dropdown-item:hover {
-  background: lightgrey;
+  background: #e4e4e4;
 }
