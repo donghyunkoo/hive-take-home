@@ -3,77 +3,56 @@
  * allows single and multi select
  */
 import React, {
-    useState
+    useState,
+    useEffect,
 } from 'react';
 import '../../App.css';
 import CaretDown from '../../assets/icons/caret-down.svg';
 import CaretUp from '../../assets/icons/caret-up.svg';
-import { DropdownItem } from './DropdownItem';
 
 interface DropdownProps {
     children?: React.ReactNode;
+    onSelect?: (event: React.ChangeEvent<{ value: string }>) => void;
+    selected?: Set<string>;
+    placeholder?: string;
+    renderedText?: string;
+    multiple?: boolean;
 }
 
 
 export const Dropdown: React.FC<DropdownProps> = ({
     children,
+    placeholder,
+    renderedText,
+    selected,
+    multiple = false,
+    onSelect,
 }) => {
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [selected, setSelected] = useState<string[]>([]);
-
+    const [isActive, setIsActive] = useState<boolean>(false);
 
     return (
         <>
             <div className="dropdown">
                 {/*     Text Field    */}
-                <div className="dropdown-button" onClick={() => setIsOpen(!isOpen)}>
-                    {/*     Placeholder if empty    */}
-                    {selected.length === 0
-                        ? "Choose One"
-                        : selected.toString()}
-                    {isOpen
+                <div
+                    className={"dropdown-button" + (isActive ? " active" : "")}
+                     onClick={() => setIsActive(!isActive)}
+                >
+                    {/*     Placeholder no rendered text    */}
+                    {renderedText
+                        ? placeholder
+                        : placeholder}
+                    {isActive
                         ? <img src={CaretUp} alt="Caret Up"/>
                         : <img src={CaretDown} alt="Caret Down"/>}
                 </div>
 
                 {/*     Dropdown Menu Items     */}
-                {isOpen &&
+                {isActive &&
                     <ul className="dropdown-content">
-                        <DropdownItem
-                            id={"A"}
-                            value={"A"}
-                            label={"Option A"}
-                        />
-                        <DropdownItem
-                            id={"B"}
-                            value={"B"}
-                            label={"Option B"}
-                        />
-                        <DropdownItem
-                            id={"C"}
-                            value={"C"}
-                            label={"Option C"}
-                        />
-                        <DropdownItem
-                            id={"D"}
-                            value={"D"}
-                            label={"Option D"}
-                        />
-                        <DropdownItem
-                            id={"E"}
-                            value={"E"}
-                            label={"Option E"}
-                        />
-                        <DropdownItem
-                            id={"F"}
-                            value={"F"}
-                            label={"Option F"}
-                        />
-                        <DropdownItem
-                            id={"G"}
-                            value={"G"}
-                            label={"Option G"}
-                        />
+                        {React.Children.map(children, (child: any) =>
+                            React.cloneElement(child, { onClick: onSelect, isSelected: selected?.has(child.props.value) })
+                        )}
                     </ul>
                 }
             </div>
