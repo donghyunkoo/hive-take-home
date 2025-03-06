@@ -1,46 +1,30 @@
-# Getting Started with Create React App
+# Hive AI 2025 Take-home
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Running the Code
 
-In the project directory, you can run:
+In the project directory, install the required packages using `npm install` and then run the program using:
 
 ### `npm start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Requirements
+1) open and close – satisfied. Click on the select box to open the dropdowns.
+2) single/multi select – satisfied. Pass the "multiple" prop to pick between a multi-select and a single-select.
+3) select/deselect all – satisfied. In the multi-select dropdown, the first dropdown item is an option that allows the user to select or deselect all the options.
+4) selected are visible when the dropdown is closed – satisfied. While the dropdown is closed, the user can hover over the select box. This opens a scrollable tooltip that shows all the selected options.
+5) reusable / controlled – satisfied(?)
+6) efficient rendering of large dropdown lists – satisfied. The component uses [React Window](https://github.com/bvaughn/react-window) in order to efficiently render only the dropdown items that are currently visible to the user.
 
-### `npm test`
+## Design Choices
+1) Instead of adding a checkbox (or similar) for selecting/deselecting all, I added an option at the top of the dropdown. I just thought that this made more sense and would be easier for users as well. This way they need to have the options visible to them (or some at least) before deciding to select / deselect all.
+2) Using a tooltip for viewing all the options. I didn't think it would be a good idea if the select box's text field grew with the size of the input as the user is selecting items, and so I decided to keep everything to a single line and added the tooltip instead. I made the tooltip only visible when the dropdown isn't open so that it does not get in the way when the user is selecting items.
+3) Using React Window. I've never used it before. I just saw it was recommended in a post online. I think it was a good choice for efficiently rendering the items as it only renders/updates the dropdown items that are currently visible.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Future Improvements
+If more time were made available to work on this take-home, I'd try to add features that make it more reusable/customizable. The goal was to make this seem like it's a component from a UI component library and so ease of use and customizability are pretty high priority in my opinion. 
+Another thing I would add would be the ability to navigate through the options using the keyboard (arrow keys, enter, esc). It wasn't an essential feature so I planned to do it last, but ran out of time.
+It wasn't specified, but I created a typescript project and so if I had time left over, I'd update all the any's with the proper typing. I'd also probably want to spend more time tuning the performance.
