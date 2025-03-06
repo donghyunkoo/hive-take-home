@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  padding: 100px; /* no justification for 100 */
+  display: flex;
+  justify-content: space-between;
 }
 
 .App-logo {
@@ -35,4 +38,120 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Dropdown */
+.dropdown {
+  width: 400px;
+  /*margin: 100px auto;*/
+  position: relative;
+  /*background-color: blue; !* TODO: remove *!*/
+  border-radius: 4px;
+}
+
+.dropdown .dropdown-button {
+  padding: 16px;
+  background: white;
+  /*box-shadow: 2px 2px 10px 6px rgba(0, 0, 0, 0.08);*/
+  /*font-weight: bold;*/
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border: 2px solid grey;
+  border-radius: 4px;
+  /* prevent overflow */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  img {
+    user-select: none;
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+}
+
+.dropdown .dropdown-button.active {
+  border: 2px solid black;
+}
+
+.dropdown .dropdown-button:hover {
+  border: 2px solid black;
+}
+
+.dropdown .dropdown-content {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  background: white;
+  box-shadow: 2px 2px 10px 6px rgba(0, 0, 0, 0.08);
+  /*font-weight: 500;*/
+  border-radius: 4px;
+  overflow-y: auto;
+  max-height: 300px;
+  /* undo <ul> default padding and margin */
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown .dropdown-content .dropdown-item {
+  padding: 12px;
+  cursor: pointer;
+  text-align: left;
+  /* prevent overflow */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-item.selected {
+  background: lightgrey;
+}
+
+.dropdown .dropdown-item {
+  display: flex;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.dropdown .dropdown-item:hover {
+  background: #e4e4e4;
+}
+
+/* tooltip */
+.tooltip {
+  /* initially hidden */
+  visibility: hidden;
+  position: absolute;
+  max-height: 300px;
+  /* Break words to the next line */
+  word-wrap: break-word;
+  /* Ensure long words break and wrap */
+  word-break: break-word;
+  /* Allow text to wrap */
+  white-space: normal;
+  overflow-y: auto;
+  /* Position the tooltip above the select box
+  so it doesn't get in the way of the dropdown */
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(158, 158, 158, 0.8);
+  color: #fff; /* White text */
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  /* make sure the tooltip is on top*/
+  z-index: 1;
+  /* initially hidden */
+  opacity: 0;
+  /* transition for the tooltip */
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Show the tooltip when hovering over the dropdown button */
+.dropdown-button:hover .tooltip {
+  visibility: visible;
+  /* Make the tooltip fully visible on hover */
+  opacity: 1;
 }
