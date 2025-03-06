@@ -4,7 +4,7 @@
  */
 import React, {
     useState,
-    useMemo,
+    useEffect,
 } from 'react';
 import '../../App.css';
 import CaretDown from '../../assets/icons/caret-down.svg';
@@ -19,22 +19,24 @@ interface DropdownProps {
     selected?: Set<string>;
     placeholder?: string;
     multiple?: boolean;
+    format?: any;
 }
 
 
 export const Dropdown: React.FC<DropdownProps> = ({
-                                                      children,
-                                                      placeholder,
-                                                      selected,
-                                                      multiple = false,
-                                                      // onSelect,
-                                                      onChange,
-                                                  }) => {
+    children,
+    placeholder,
+    selected,
+    multiple = false,
+    onChange,
+    format,
+}) => {
     const [isActive, setIsActive] = useState<boolean>(false);
     const [renderedText, setRenderedText] = useState<string>('');
 
     const onSelectMultiple = (event: any) => {
-        const value = event.target.getAttribute('value');
+        // const value = event.target.getAttribute('value');
+        const value = event.target;
 
         onChange((prevSelected: Iterable<unknown> | null | undefined) => {
             const newSelected = new Set(prevSelected);
@@ -104,6 +106,17 @@ export const Dropdown: React.FC<DropdownProps> = ({
         }
     })();
 
+    // format the text for
+    useEffect(() => {
+        if (format) {
+            // custom formatter
+            setRenderedText(format(selected));
+        } else {
+            // default comma-separated
+            setRenderedText(Array.from(selected ?? []).join(", "));
+        }
+    }, [selected]);
+
 
     // row render function for FixedSizeList
     const renderRow = ({index, style}: { index: number; style: React.CSSProperties }) => {
@@ -150,8 +163,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     {/*     Placeholder no rendered text    */}
                     {selected?.size === 0
                         ? placeholder
-                        : Array.from(selected ?? []).join(", ")}
-                        {/*: renderedText}*/}
+                        : renderedText}
                     {isActive
                         ? <img src={CaretUp} alt="Caret Up"/>
                         : <img src={CaretDown} alt="Caret Down"/>}

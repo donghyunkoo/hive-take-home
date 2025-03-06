@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useState, useCallback} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {Dropdown} from './components/dropdown'
@@ -10,19 +10,25 @@ function App() {
     const [selected, setSelected] = useState<Set<string>>(new Set());
     const [selectedOne, setSelectedOne] = useState<Set<string>>(new Set());
 
+    // custom formatter for selected options
+    const textFormatter = useCallback((values: string[]) => {
+        return Array.from(values ?? []).join(", ")
+    }, []);
+
     return (
         <div className="App">
             <Dropdown
                 placeholder={"Choose one or more"}
                 onChange={setSelected}
                 selected={selected}
+                format={textFormatter}
                 multiple
             >
                 {Array.from({length: 500}).map((_, index) => {
                     return (
                         <DropdownItem
                             key={(index+1).toString()}
-                            value={(index+1).toString()}
+                            value={`Option ${index + 1}`}
                             label={`Option ${index + 1}`}
                         />
                     )
@@ -36,68 +42,28 @@ function App() {
             >
                 <DropdownItem
                     key={"A"}
-                    value={"A"}
+                    value={"Option A"}
                     label={"Option A"}
                 />
                 <DropdownItem
                     key={"B"}
-                    value={"B"}
+                    value={"Option B"}
                     label={"Option B"}
                 />
                 <DropdownItem
                     key={"C"}
-                    value={"C"}
+                    value={"Option C"}
                     label={"Option C"}
                 />
                 <DropdownItem
                     key={"D"}
-                    value={"D"}
+                    value={"Option D"}
                     label={"Option D"}
                 />
                 <DropdownItem
                     key={"E"}
-                    value={"E"}
+                    value={"Option E"}
                     label={"Option E"}
-                />
-                <DropdownItem
-                    key={"F"}
-                    value={"F"}
-                    label={"Option F"}
-                />
-                <DropdownItem
-                    key={"G"}
-                    value={"G"}
-                    label={"Option G"}
-                />
-                <DropdownItem
-                    key={"H"}
-                    value={"H"}
-                    label={"Option H"}
-                />
-                <DropdownItem
-                    key={"I"}
-                    value={"I"}
-                    label={"Option I"}
-                />
-                <DropdownItem
-                    key={"J"}
-                    value={"J"}
-                    label={"Option J"}
-                />
-                <DropdownItem
-                    key={"K"}
-                    value={"K"}
-                    label={"Option K"}
-                />
-                <DropdownItem
-                    key={"L"}
-                    value={"L"}
-                    label={"Option L"}
-                />
-                <DropdownItem
-                    key={"M"}
-                    value={"M"}
-                    label={"Option M"}
                 />
             </Dropdown>
         </div>
