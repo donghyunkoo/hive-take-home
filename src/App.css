@@ -58,6 +58,12 @@
   cursor: pointer;
   border: 2px solid black;
   border-radius: 4px;
+
+  img {
+    user-select: none;
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
 }
 
 .dropdown .dropdown-content {
