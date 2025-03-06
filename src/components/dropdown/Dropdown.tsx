@@ -9,6 +9,8 @@ import React, {
 import '../../App.css';
 import CaretDown from '../../assets/icons/caret-down.svg';
 import CaretUp from '../../assets/icons/caret-up.svg';
+import {FixedSizeList as List} from "react-window";
+import { DropdownItem } from "./DropdownItem";
 
 interface DropdownProps {
     children?: React.ReactNode;
@@ -21,20 +23,15 @@ interface DropdownProps {
 
 
 export const Dropdown: React.FC<DropdownProps> = ({
-    children,
-    placeholder,
-    selected,
-    multiple = false,
-    // onSelect,
-    onChange,
-}) => {
+                                                      children,
+                                                      placeholder,
+                                                      selected,
+                                                      multiple = false,
+                                                      // onSelect,
+                                                      onChange,
+                                                  }) => {
     const [isActive, setIsActive] = useState<boolean>(false);
     const [renderedText, setRenderedText] = useState<string>('');
-
-    const allValues = useMemo(
-        () => React.Children.map(children, (child: any) => child.props.value) || [],
-        [children] // Recalculate only if `children` changes
-    );
 
     const onSelectMultiple = (event: any) => {
         const value = event.target.getAttribute('value');
@@ -67,14 +64,80 @@ export const Dropdown: React.FC<DropdownProps> = ({
     }
 
     const onSelectAll = (event: any) => {
-        const isAllSelected = selected?.size === allValues?.length;
+        const isAllSelected = selected?.size === allDropdownItems?.length - 1;
 
         if (isAllSelected) {
             onChange(new Set());
         } else {
-            onChange(new Set(allValues));
+            const allValues = allDropdownItems.map((item) => {
+                // TODO: need to figure out what is going on with the typing
+                if (!React.isValidElement(item)) {
+                    // If the item is not a valid React element, return null
+                    return null;
+                }
+                const itemObj: any = item.props;
+                return itemObj.value;
+            });
+
+            onChange(new Set(
+                multiple
+                    ? allValues.slice(1)
+                    : allValues
+            ));
         }
     }
+
+    const allDropdownItems = (() => {
+        if (multiple) {
+            // add the select/deselect all option and make it an array
+            const allOption = (
+                <DropdownItem
+                    key={""}
+                    value={""}
+                    label={"All"}
+                />
+            );
+            return [allOption, ...React.Children.toArray(children)];
+        } else {
+            // else just convert children to an array
+            return React.Children.toArray(children);
+        }
+    })();
+
+
+    // row render function for FixedSizeList
+    const renderRow = ({index, style}: { index: number; style: React.CSSProperties }) => {
+        // get the item at the index
+        const item = allDropdownItems[index];
+
+        if (!React.isValidElement(item)) {
+            // If the item is not a valid React element, return null or handle it accordingly
+            return null;
+        }
+
+        // TODO: check this. typing is weird.
+        const itemObj: any = item.props;
+
+        if (itemObj?.value === "") {
+            return (
+                <div style={style}>
+                    {React.cloneElement(item as React.ReactElement<any>, {
+                        onClick: onSelectAll,
+                        isSelected: allDropdownItems.length - 1 === selected?.size,
+                    })}
+                </div>
+            );
+        } else {
+            return (
+                <div style={style}>
+                    {React.cloneElement(item as React.ReactElement<any>, {
+                        onClick: multiple ? onSelectMultiple : onSelect,
+                        isSelected: selected?.has(itemObj.value),
+                    })}
+                </div>
+            );
+        }
+    };
 
     return (
         <>
@@ -92,33 +155,26 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     {isActive
                         ? <img src={CaretUp} alt="Caret Up"/>
                         : <img src={CaretDown} alt="Caret Down"/>}
+
+                    {/* Tooltip showing values on hover */}
+                    {selected && selected.size > 0 && !isActive && (
+                        <div className="tooltip">
+                            {Array.from(selected).join(", ")}
+                        </div>
+                    )}
                 </div>
 
                 {/*     Dropdown Menu Items     */}
                 {isActive &&
                     <ul className="dropdown-content">
-                        {multiple &&
-                            <li
-                                className={"dropdown-item" + (
-                                    allValues.length === selected?.size
-                                        ? " selected"
-                                        : ""
-                                )}
-                                key={""}
-                                value={""}
-                                onClick={onSelectAll}
-                            >
-                                All
-                            </li>
-                        }
-                        {React.Children.map(children, (child: any) =>
-                            React.cloneElement(child, {
-                                onClick: multiple
-                                    ? onSelectMultiple
-                                    : onSelect,
-                                isSelected: selected?.has(child.props.value),
-                            })
-                        )}
+                        <List
+                            height={300} // The height of the viewport (visible area)
+                            itemCount={React.Children.count(children)} // Total number of items (children)
+                            itemSize={40} // The height of each item in pixels
+                            width="100%" // The width of the dropdown
+                        >
+                            {renderRow}
+                        </List>
                     </ul>
                 }
             </div>
