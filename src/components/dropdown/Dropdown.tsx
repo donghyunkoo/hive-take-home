@@ -8,6 +8,7 @@ import React, {
 import '../../App.css';
 import CaretDown from '../../assets/icons/caret-down.svg';
 import CaretUp from '../../assets/icons/caret-up.svg';
+import { DropdownItem } from './DropdownItem';
 
 interface DropdownProps {
     children?: React.ReactNode;
@@ -37,48 +38,43 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
                 {/*     Dropdown Menu Items     */}
                 {isOpen &&
-                    <div className="dropdown-content">
-                        <div className="dropdown-item">
-                            option A
-                        </div>
-                        <div className="dropdown-item">
-                            option B
-                        </div>
-                        <div className="dropdown-item">
-                            option C
-                        </div>
-                        <div className="dropdown-item">
-                            A super duper long option that should not fit
-                            if it is not handled properly
-                        </div>
-                        <div className="dropdown-item">
-                            option D
-                        </div>
-                        <div className="dropdown-item">
-                            option E
-                        </div>
-                        <div className="dropdown-item">
-                            option F
-                        </div>
-                        <div className="dropdown-item">
-                            option G
-                        </div>
-                        <div className="dropdown-item">
-                            option H
-                        </div>
-                        <div className="dropdown-item">
-                            option I
-                        </div>
-                        <div className="dropdown-item">
-                            option J
-                        </div>
-                        <div className="dropdown-item">
-                            option K
-                        </div>
-                        <div className="dropdown-item">
-                            option L
-                        </div>
-                    </div>
+                    <ul className="dropdown-content">
+                        <DropdownItem
+                            id={"A"}
+                            value={"A"}
+                            label={"Option A"}
+                        />
+                        <DropdownItem
+                            id={"B"}
+                            value={"B"}
+                            label={"Option B"}
+                        />
+                        <DropdownItem
+                            id={"C"}
+                            value={"C"}
+                            label={"Option C"}
+                        />
+                        <DropdownItem
+                            id={"D"}
+                            value={"D"}
+                            label={"Option D"}
+                        />
+                        <DropdownItem
+                            id={"E"}
+                            value={"E"}
+                            label={"Option E"}
+                        />
+                        <DropdownItem
+                            id={"F"}
+                            value={"F"}
+                            label={"Option F"}
+                        />
+                        <DropdownItem
+                            id={"G"}
+                            value={"G"}
+                            label={"Option G"}
+                        />
+                    </ul>
                 }
             </div>
         </>
