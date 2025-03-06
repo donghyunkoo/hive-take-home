@@ -4,7 +4,7 @@
  */
 import React, {
     useState,
-    useEffect,
+    useMemo,
 } from 'react';
 import '../../App.css';
 import CaretDown from '../../assets/icons/caret-down.svg';
@@ -31,6 +31,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
     const [isActive, setIsActive] = useState<boolean>(false);
     const [renderedText, setRenderedText] = useState<string>('');
 
+    const allValues = useMemo(
+        () => React.Children.map(children, (child: any) => child.props.value) || [],
+        [children] // Recalculate only if `children` changes
+    );
+
     const onSelectMultiple = (event: any) => {
         const value = event.target.getAttribute('value');
 
@@ -52,12 +57,22 @@ export const Dropdown: React.FC<DropdownProps> = ({
     const onSelect = (event: any) => {
         const value = event.target.getAttribute('value');
         const label = event.target.textContent;
-        if (selected?.has(value)){
+        if (selected?.has(value)) {
             onChange(new Set())
             setRenderedText('')
         } else {
             onChange(new Set(value));
             setRenderedText(label);
+        }
+    }
+
+    const onSelectAll = (event: any) => {
+        const isAllSelected = selected?.size === allValues?.length;
+
+        if (isAllSelected) {
+            onChange(new Set());
+        } else {
+            onChange(new Set(allValues));
         }
     }
 
@@ -67,13 +82,13 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 {/*     Text Field    */}
                 <div
                     className={"dropdown-button" + (isActive ? " active" : "")}
-                     onClick={() => setIsActive(!isActive)}
+                    onClick={() => setIsActive(!isActive)}
                 >
                     {/*     Placeholder no rendered text    */}
                     {selected?.size === 0
                         ? placeholder
-                        // : Array.from(selected ?? []).join(", ")}
-                        : renderedText}
+                        : Array.from(selected ?? []).join(", ")}
+                        {/*: renderedText}*/}
                     {isActive
                         ? <img src={CaretUp} alt="Caret Up"/>
                         : <img src={CaretDown} alt="Caret Down"/>}
@@ -82,6 +97,20 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 {/*     Dropdown Menu Items     */}
                 {isActive &&
                     <ul className="dropdown-content">
+                        {multiple &&
+                            <li
+                                className={"dropdown-item" + (
+                                    allValues.length === selected?.size
+                                        ? " selected"
+                                        : ""
+                                )}
+                                key={""}
+                                value={""}
+                                onClick={onSelectAll}
+                            >
+                                All
+                            </li>
+                        }
                         {React.Children.map(children, (child: any) =>
                             React.cloneElement(child, {
                                 onClick: multiple

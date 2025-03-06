@@ -15,7 +15,7 @@ function App() {
                 placeholder={"Choose one"}
                 onChange={setSelected}
                 selected={selected}
-                // multiple
+                multiple
             >
                 <DropdownItem
                     key={"A"}
