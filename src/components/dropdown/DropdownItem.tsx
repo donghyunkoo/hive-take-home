@@ -5,7 +5,7 @@ import React from 'react';
 
 
 interface DropdownItemProps {
-    id?: string;
+    key?: string;
     label?: string;
     value?: string;
     isSelected?: boolean;
@@ -14,7 +14,7 @@ interface DropdownItemProps {
 }
 
 export const DropdownItem: React.FC<DropdownItemProps> = ({
-    id,
+    key,
     value,
     label = value,
     disabled = false,
@@ -26,7 +26,7 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({
         <>
             <li
                 className={"dropdown-item" + (isSelected ? " selected" : "")}
-                id={id}
+                key={key}
                 value={value}
                 onClick={disabled ? undefined : onClick}
             >
