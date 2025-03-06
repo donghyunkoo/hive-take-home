@@ -27,8 +27,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                     Choose One
                     {isOpen
                         ? <img src={CaretUp} alt="Caret Up"/>
-                        : <img src={CaretDown} alt="Caret Down"/>
-                }
+                        : <img src={CaretDown} alt="Caret Down"/>}
             </div>
 
                 {/*     Dropdown Menu Items     */}
